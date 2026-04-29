@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"unicode/utf8"
 
@@ -27,6 +28,16 @@ func main() {
 	if showVersion {
 		fmt.Printf("dechar version: %v\n", Version)
 		os.Exit(0)
+	}
+
+	stat, _ := os.Stdin.Stat()
+	if (stat.Mode() & os.ModeCharDevice) == 0 {
+		bytes, err := io.ReadAll(os.Stdin)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "error:", err)
+			os.Exit(1)
+		}
+		showCharDetails(string(bytes))
 	}
 
 	for _, s := range os.Args[1:] {

@@ -6,6 +6,10 @@ Decomposes characters and shows them in all their Unicode splendour.
 ```perl
 $ dechar <one or more characters>
 ```
+or:
+```text
+$ echo <one or more characters> | dechar
+```
 
 Example:
 ```perl
