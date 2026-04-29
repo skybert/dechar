@@ -1,0 +1,52 @@
+name: dechar-build-binaries
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+# Github action needs write permission to create a release from a Git
+# version tag.
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      matrix:
+        include:
+          - os: darwin
+            runner: macos-latest
+            arch: amd64
+          - os: darwin
+            runner: macos-latest
+            arch: arm64
+          - os: linux
+            runner: ubuntu-latest
+            arch: amd64
+          - os: linux
+            runner: ubuntu-latest
+            arch: arm64
+          - os: openbsd
+            runner: ubuntu-latest
+            arch: amd64
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: dechar-setup-go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24.x'
+
+      - name: dechar-build-dist
+        run: make dist
+        env:
+          GOOS: ${{ matrix.os }}
+          GOARCH: ${{ matrix.arch }}
+
+      - name: dechar-create-release-and-upload-binaries
+        uses: softprops/action-gh-release@v1
+        with:
+          files: dist/*
