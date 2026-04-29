@@ -28,3 +28,7 @@ Byte 4 has code point 102 U+66 'f'
 Code point 102 is encoded using 1 bytes
 Code point 102 is called LATIN SMALL LETTER F
 ```
+
+# Human made 💪
+
+`dechar` is coded by a human.
